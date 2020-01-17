@@ -17,3 +17,7 @@ docker exec -it mongodbd \
     mongo --host 192.168.99.100 -u admin -p secretpassadmin --authenticationDatabase admin \
     --eval "db.getSiblingDB('developers').createUser({user: 'paulotiago', pwd: 'secretpass', roles: [{role: 'readWrite', db: 'developers'}]})"
 ```
+
+## todo
+* create tests
+* use service await axios.get(`https://geocode.xyz/${locationString}?json=1`)
