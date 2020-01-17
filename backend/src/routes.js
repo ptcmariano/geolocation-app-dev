@@ -5,25 +5,18 @@ const axios = require('axios')
 const routes = Router()
 
 routes.post('/devs', async (request,response) => {
-    const { github_username } = request.body
-    const dataGithub = await axios.get(`https://api.github.com/users/${github_username}`)
-        .catch(err => {
-            console.log('error',err)
-            return response.json({
-                message:'error to save developer',
-                dataSaved:github_username,
-                error: err
-            })
-        })
-    const newDeveloper = {
-        name: dataGithub.data.name,
-        github_username: dataGithub.data.login,
-        bio: dataGithub.data.bio,
-        avatar_url: dataGithub.data.avatar_url,
-        techs: dataGithub.data.public_repos,
-    }
-    dev.create(newDeveloper)
-    return response.json({message:'created developer',dataSaved:newDeveloper})
+    const { github_username, techs } = request.body
+    const githubResponse = await axios.get(`https://api.github.com/users/${github_username}`)
+    const {name = login, avatar_url, bio} = githubResponse.data
+    const techArray = techs.split(',').map(tech => tech.trim())
+    const newDeveloper = await dev.create({
+        github_username,
+        name,
+        avatar_url,
+        bio,
+        techs: techArray
+    })
+    return response.json(newDeveloper)
 })
 
 routes.get('/allDevs', async (request,response) => {
