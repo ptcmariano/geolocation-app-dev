@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose')
+const pointSchema = require('./types/pointSchema')
 
 const devSchema = new mongoose.Schema({
     name: String,
@@ -7,8 +8,10 @@ const devSchema = new mongoose.Schema({
     bio: String,
     avatar_url: String,
     techs: [String],
-    // latitude: 
-    // longitude: 
+    location: {
+        type: pointSchema,
+        index: '2dsphere'
+    }
 })
 
 module.exports = mongoose.model('dev', devSchema)
